@@ -14,5 +14,7 @@ public class StaticArray1 {
         System.out.println(arr3[1]);
         arr3[1] = "未注册";
         System.out.println(arr3[1]);
+
+
     }
 }

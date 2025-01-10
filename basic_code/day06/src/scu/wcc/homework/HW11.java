@@ -3,6 +3,7 @@ package scu.wcc.homework;
 import java.util.Random;
 
 public class HW11 {
+    //没有通用性
     public static void main(String[] args) {
         getAward();
     }

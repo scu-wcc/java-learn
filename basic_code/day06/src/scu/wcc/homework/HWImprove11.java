@@ -3,9 +3,10 @@ package scu.wcc.homework;
 import java.util.Random;
 
 public class HWImprove11 {
+    //较HW11更具通用性
     public static void main(String[] args) {
         Random r =new Random();
-        int[] arr =  {2,588,888,1000,10000};
+        int[] arr =  {2,588,888,1000,10000,99999,999999};
         int[] brr=new int[arr.length];
         int index =0;
         boolean flag;

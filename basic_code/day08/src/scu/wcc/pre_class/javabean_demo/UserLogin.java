@@ -3,7 +3,7 @@ package scu.wcc.pre_class.javabean_demo;
 public class UserLogin {
     //标准的JavaBean
     /*
-    1.见名知意
+    1.类名见名知意，大驼峰命名法
     2.成员变量使用private修饰
     3.提供至少两个构造方法：空参和带全部参数
     4.为每个成员变量提供对应的set和get方法

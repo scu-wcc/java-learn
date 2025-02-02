@@ -34,6 +34,7 @@ tip:
         
 9.String，StringBuilder，StringJoiner：
     ·String:基础操作包括：substring，replace，charAt，equals等，以及字符串不同创建方式导致存储位置的不同。
+                        注意事项：键盘录入的字符串属于 new 出来的。
     
     ·StringBuilder:基础操作包括：append，reverse，toString等。
                    应用场景：1.字符串的拼接(不会出现中间量，节省空间和时间)。

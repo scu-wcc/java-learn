@@ -34,14 +34,20 @@ tip:
         
 9.String，StringBuilder，StringJoiner：
     ·String:基础操作包括：substring，replace，charAt，equals等，以及字符串不同创建方式导致存储位置的不同。
-                        注意事项：键盘录入的字符串属于 new 出来的。
+                    注意事项：键盘录入的字符串属于 new 出来的。
     
     ·StringBuilder:基础操作包括：append，reverse，toString等。
-                   应用场景：1.字符串的拼接(不会出现中间量，节省空间和时间)。
+                    应用场景：1.字符串的拼接(不会出现中间量，节省空间和时间)。
                             2.字符串的反转。
                             
     ·StringJoiner:基础操作包括：add，toString等。
-                  注意事项：1.构造方法必须带参，一种是只规定间隔，另一种是规定开头，间隔和结尾。
+                    注意事项：1.构造方法必须带参，一种是只规定间隔，另一种是规定开头，间隔和结尾。
                            2.JDK8提出来的新特性，之前的版本无法使用StringJoiner。
-                  应用场景：使用特定场景拼接字符串。
+                    应用场景：使用特定场景拼接字符串。
+
+10.String拼接的底层原理：
+    ·String s = "a"+"b": 没有变量的拼接：javac在编译java文件时直接生成"ab"字符串，该字符串属于串池，可以复用。
+    ·String s1 = s2 + s3: 有变量参与的拼接
+                    JDK8之前：先生成一个StringBuilder对象，使用sb.append()，然后使用toString()生成字符串对象。每一个"+"都会导致生成两个对象：StringBuilder 和 String。
+                    JDK8之后：系统底层估计本次拼接得到的字符串大小，生成数组，将字符串放入数组中，最后再生成最终的字符串。
 

@@ -33,7 +33,7 @@ tip:
     ·使用new创建出来的字符串无法复用。每次new时都会在堆上开辟新空间用于存储此时的字符串。
         
 9.String，StringBuilder，StringJoiner：
-    ·String:基础操作包括：substring，replace，charAt，equals等，以及字符串不同创建方式导致存储位置的不同。
+    ·String:基础操作包括：substring，replace，charAt，equals，toCharArray等，以及字符串不同创建方式导致存储位置的不同。
                     注意事项：键盘录入的字符串属于 new 出来的。
     
     ·StringBuilder:基础操作包括：append，reverse，toString等。
@@ -51,3 +51,9 @@ tip:
                     JDK8之前：先生成一个StringBuilder对象，使用sb.append()，然后使用toString()生成字符串对象。每一个"+"都会导致生成两个对象：StringBuilder 和 String。
                     JDK8之后：系统底层估计本次拼接得到的字符串大小，生成数组，将字符串放入数组中，最后再生成最终的字符串。
 
+11.StringBuilder底层原理：
+    ·默认创建大小为16的字节数组
+    ·根据添加的内容长度(len)进行扩容：
+            len<=16,直接存；
+            16<len<=34,扩容到16*2+=34字节；
+            len>34：直接扩容到len字节。

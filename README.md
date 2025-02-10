@@ -39,11 +39,11 @@ tip:
     
     ·StringBuilder:基础操作包括：append，reverse，toString等。
                     应用场景：1.字符串的拼接(不会出现中间量，节省空间和时间)。
-                            2.字符串的反转。
+                             2.字符串的反转。
                             
     ·StringJoiner:基础操作包括：add，toString等。
                     注意事项：1.构造方法必须带参，一种是只规定间隔，另一种是规定开头，间隔和结尾。
-                           2.JDK8提出来的新特性，之前的版本无法使用StringJoiner。
+                             2.JDK8提出来的新特性，之前的版本无法使用StringJoiner。
                     应用场景：使用特定场景拼接字符串。
 
 10.String拼接的底层原理：

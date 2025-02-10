@@ -33,6 +33,7 @@ tip:
     ·使用new创建出来的字符串无法复用。每次new时都会在堆上开辟新空间用于存储此时的字符串。
         
 9.String，StringBuilder，StringJoiner：
+
     ·String:基础操作包括：substring，replace，charAt，equals，toCharArray等，以及字符串不同创建方式导致存储位置的不同。
                     注意事项：键盘录入的字符串属于 new 出来的。
     

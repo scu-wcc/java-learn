@@ -47,9 +47,10 @@ tip:
                     应用场景：使用特定场景拼接字符串。
 
 10.String拼接的底层原理：
+
     ·String s = "a"+"b": 没有变量的拼接：javac在编译java文件时直接生成"ab"字符串，该字符串属于串池，可以复用。
     ·String s1 = s2 + s3: 有变量参与的拼接
-                    JDK8之前：先生成一个StringBuilder对象，使用sb.append()，然后使用toString()生成字符串对象。每一个"+"都会导致生成两个对象：StringBuilder 和 String。
+                    JDK8之前：先生成一个StringBuilder对象，使用sb.append()，然后使用toString()生成字符串对象。每一个"+"都会导致生成两个对象： StringBuilder 和 String。
                     JDK8之后：系统底层估计本次拼接得到的字符串大小，生成数组，将字符串放入数组中，最后再生成最终的字符串。
 
 11.StringBuilder底层原理：

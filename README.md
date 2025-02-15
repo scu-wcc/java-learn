@@ -59,3 +59,22 @@ tip:
             len<=16,直接存；
             16<len<=34,扩容到16*2+2=34字节；
             len>34：直接扩容到len字节。
+
+12.static
+    ·静态变量属于类，该类的全体对象共享。
+    ·静态变量(方法)随着类的加载而加载，优先于对象。
+    
+    ·静态方法多用于工具类和测试类。
+    ·静态方法无法直接调用非静态的变量和方法(没有this关键字)，但是可以在静态方法中构造对象调用。
+     public class Teacher(){
+         public static void show(){
+             Teacher t = new Teacher();
+             t.其他方法;
+             
+             Student s = new Student();
+             s.其他方法;
+             
+         }
+     
+     }
+ 

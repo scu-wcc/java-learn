@@ -9,13 +9,15 @@ public class Teacher {
     //非静态方法可以调用本类全部方法和变量。
 
     //在静态方法中可以通过实例化对象调用类方法
-    public static void show(String name,int age){
+    public static Teacher show(String name,int age){
         Student s = new Student(name,age);
         System.out.println("学生年龄："+s.getAge());
 
         Teacher t = new Teacher();
         t.setName("王老师");
         System.out.println("老师姓名："+t.getName());
+
+        return t;
 
     }
 

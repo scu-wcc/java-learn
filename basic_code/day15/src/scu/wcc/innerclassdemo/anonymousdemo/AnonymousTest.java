@@ -22,7 +22,6 @@ public class AnonymousTest {
         };
         s.swim();
 
-
         method(new Animal("狗狗",3){
 
             //匿名内部类的成员没有意义，无法调用(多态编译看父类)
@@ -37,7 +36,6 @@ public class AnonymousTest {
                 System.out.println(getName()+"正在吃"+getFood());
             }
         });
-
 
         new Animal() {
             @Override

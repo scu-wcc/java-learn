@@ -311,7 +311,7 @@ tip:
 31.Data d = new Date();获取当前系统的时间
 32.SimpleDateFormat:格式化时间
 33.JDK8后新增的时间对象不可变，创建新时间时会返回新的对象
-34.JDK7的Calendar中月份是从0~11，而JDK8的LocalDate是1~12。
+34.JDK7的Calendar中月份是从0-11，而JDK8的LocalDate是1-12。
 	......
 	
 35.包装类：基本数据类型的对象类

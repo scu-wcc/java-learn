@@ -620,7 +620,7 @@ HashMap:JDK8后维持的红黑树不需要传递比较规则：
     4.通过添加元素的键值获取哈希值，并与数组的最大索引进行异或操作，获取要存放的位置。
         -存放位置为null:
             直接创建新node记录当前元素的hash，key，value并添加入数组中，判断当前数组中非null是否小于扩容阈值，满足则扩容，不满足则返回null；
-        -存放位置存在元素，并且键不重复，挂在下面形成红黑树：
+        -存放位置存在元素，并且键不重复，挂在下面形成红黑树/链表：
             首先判断当前键值对的hash值与已存在键值对的hash(一般键不同，hash就不同)，
             再判断已存在节点是否为树节点，如果是，则执行putTreeVal，尝试将新的节点添加入树中，
             如果不是，则执行添加链表的函数：依次判断当前节点的下一节点是否为null，添加节点。
@@ -630,7 +630,6 @@ HashMap:JDK8后维持的红黑树不需要传递比较规则：
             当满足hash&&key都相同，就会执行覆盖：
                 将要添加的键值对中的new value赋值给当前节点的value，同时返回old value;
                 可见,覆盖不是创建新节点覆盖老节点，而是将老节点的value覆盖成新value，节点的地址值不变。
- 
 TreeMap:
 
     1.第一次添加时会创建节点并将该节点置为根节点；
@@ -639,6 +638,92 @@ TreeMap:
         2.2 得到要添加的key和当前节点的key比较结果：
             ==0：则执行覆盖，与HashMap相同；
             >0:将当前节点换成其右孩子；
-            <0:将当前节点换成其左孩子；
-        2.3 判断当前节点是否为null：null:执行添加函数；非null则循环2.2
-        2.4 添加完毕后执行fixAfterInsertion：调整树的结构。
+            <0:将当前节点换成其左孩子； 
+        2.3 判断当前节点是否为null：null:执行添加函数(addEntry)；非null则循环2.2
+        2.4 在addEntry函数中，添加完毕后会执行fixAfterInsertion：调整树的结构。
+61.可变参数: 数据类型...变量名; JDK5之后的新特性。
+    
+    --底层原理是一个数组，作为形参时可以接收不定数量的变量；
+    --由于可变参数会接收传入的所有多余变量，所以只能放在形参列表最后，这也使得形参中只能有一个可变参数。
+
+62.Collections:单列集合的工具类，具体使用查阅API帮助文档。
+
+63.不可变集合: 一旦创建，无法修改(增删改)，只能读取。
+    
+    -List.of(E...e):List; 任意传入参数，返回一个List集合。
+    -Set.of(E...e):Set; 任意传入参数，但参数不能重复，否则会报错，返回一个Set集合。
+    -Map.of(k1,v1,k2,v2,......):传入的参数依次为：键,值......; 不能传入相同的键，否则报错；
+        Map.of()最多接收10个键值对：受限于方法构造时可变参数只能传递一个，此时无法将键和值都设为可变参数。
+        -Map.ofEntries(E...e):可以接收可变参数，使用数组传递。
+            1.使用HashMap/TreeMap创建一个Map集合, 向集合中传递键值对
+            2.提取Mao集合中的键值对Entyies，转换成Set：Map.entrySet();
+            3.调用单列集合的toArray方法，将entrySet装好成一个数组，同时指定数组的类型：
+              Map.entry[] arr = entries.toArray(new Map.entry[0])
+                当传入的数组长度小于entries的长度，会根据实际长度需要创建新数组；
+                当传入的数组长度够用时，不会创建新数组，而是直接使用传递的数组。
+            4.将arr传给Map.ofEntries(),返回一个Map不可变集合。
+        链式编程：Map.ofEntries(map.entrySet().toArray(new entry[0]))
+        JDK10:直接使用Map.copyOf(hm)即可返回一个不可变的Map集合。
+    
+64.stream流：结合lambda，简化集合/数组的操作。
+    
+    能使用stream的数据：
+        1.Collection：默认的stream方法
+        2.双列集合无法使用，需要keySet/entrySet，调用Collection的stream方法
+        2.Array：Arrays中的静态stream方法
+        4.零散的同数据类型数据：Stream.of(T...value)
+
+        注意：使用第4中方式可以传递数组当中stream流，传递引用数据类型数组没问题，
+        但是传递基本数据类型的数组就会出错：Stream.of(arr)会将这个数组的整体当成一个元素，遍历打印的结果是该数组的首地址值。
+-Stream流的常见的中间方法(方法会在返回stream流)：
+    
+    -特殊说明：1.中间方法生成的stream只能调用一次，第二次调用就会报错：stream has already been operated upon or closed。
+             2.stream流不会对原集合/数组/数据等产生影响。
+    -filter过滤器：筛选返回值为true的元素。
+    -limit(n):留下前n个元素，其他舍弃。
+    -skip(n):跳过前n个元素，后面的保存。
+    -distinct:去重;底部依赖HashSet，也就是说，依赖HashCode和equals方法。
+    -concat(Stream a, Stream b):合并，注意点：如果a、b不是相同数据类型，则合并后的数据类型为a、b类型的共同父类
+    -map:类型转换：Stream.map(new Function<原数据类型, 要转换的类型>() {
+            @Override
+            public 转换类型 apply(原类型 s) {
+                return null
+            }
+        })
+    lambda:Stream.map(s -> return null);
+-Stream的常见的终结方法
+
+    -forEach：遍历得到每一个元素。
+    -count():Stream流中元素的个数。
+    -toArray():转换成数组：
+        1.toArray():空参：返回一个Object类的数组。
+        2.带参：toArray(new IntFunction<元素数据类型[]>() {
+            @Override
+            public 元素数据类型[] apply(int value) {
+                return new 元素数据类型[value];
+            }
+        })
+        lambda：toArray(value -> new 数据类型[value];)
+        特别说明：value为该stream中元素个数，返回的数组长度只能填value,或者与之等价的数字。
+        
+        -常用的收集方法：collect:将stream流转换成集合：List、Set、Map
+            Stream.collect(Collectors.to集合()); 调用Collectors工具类的静态方法创建对应的集合
+            List:对元素没要求；
+            Set:底层是HashSet,会对元素自动去重；
+            Map:添加的键值不能重复，否则报错:Duplicate key xxx (attempted merging values xx and xx)
+                Collectors.toMap(key的规则, value的规则);
+                具体如下：
+                Stream.collect(Collectors.toMap(
+                        new Function<流中数据类型, 键的数据类型>() {
+                            @Override
+                            public 键的数据类型 apply(流中的元素 obj) {
+                                return 键;
+                            }
+                        }
+                        ,
+                        new Function<流中数据类型, 值的数据类型>() {
+                            @Override
+                            public 值的数据类型 apply(流中的元素 obj) {
+                                return 值;
+                            }
+                        }));

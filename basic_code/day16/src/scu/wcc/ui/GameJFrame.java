@@ -12,10 +12,10 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
     int[][] data = new int[4][4];
     int[][] win =new int[][]{
-            {1,2,3,4},
-            {5,6,7,8},
-            {9,10,11,12},
-            {13,14,15,16},
+            {0,1,2,3},
+            {4,5,6,7},
+            {8,9,10,11},
+            {12,13,14,15},
     };
 
     int x = 0, y = 0;
@@ -23,9 +23,9 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
     int count =0;
 
     String  accuracyImagePath ="";
-    String animalPath = "day16/image/image/animal/";
-    String womenPath = "day16/image/image/girl/";
-    String sportPath = "day16/image/image/sport/";
+    String animalPath = "basic_code/day16/image/image/animal/";
+    String womenPath = "basic_code/day16/image/image/girl/";
+    String sportPath = "basic_code/day16/image/image/sport/";
 
     String[] allPath = {animalPath,womenPath,sportPath};
 
@@ -86,7 +86,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         this.getContentPane().removeAll();
 
         if(victory()){
-            ImageIcon icon = new ImageIcon("day16/image/image/win.png");
+            ImageIcon icon = new ImageIcon("basic_code/day16/image/image/win.png");
             JLabel winJLabel = new JLabel(icon);
             winJLabel.setBounds(203,283,197,73);
             this.getContentPane().add(winJLabel);
@@ -117,7 +117,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         }
 
         //先加入的图片在上面，后加入的图片在下面
-        ImageIcon background = new ImageIcon("day16/image/image/background.png");
+        ImageIcon background = new ImageIcon("basic_code/day16/image/image/background.png");
         JLabel bgLabel = new JLabel(background);
         bgLabel.setBounds(40, 40, 508, 560);
         this.getContentPane().add(bgLabel);
@@ -214,7 +214,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             allJlabel.setBounds(83,134,420,420);
             this.getContentPane().add(allJlabel);
 
-            ImageIcon background = new ImageIcon("day16/image/image/background.png");
+            ImageIcon background = new ImageIcon("basic_code/day16/image/image/background.png");
             JLabel bgLabel = new JLabel(background);
             bgLabel.setBounds(40, 40, 508, 560);
             this.getContentPane().add(bgLabel);
@@ -324,7 +324,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             System.exit(0);
         }else if(obj == weChatItem){
             JDialog jDialog =new JDialog();
-            JLabel jLabel =new JLabel(new ImageIcon("day16/image/image/about.png"));
+            JLabel jLabel =new JLabel(new ImageIcon("basic_code/day16/image/image/about.png"));
             jDialog.setBounds(0,0,258,258);
             jDialog.getContentPane().add(jLabel);
             //对弹窗进行设置
@@ -339,6 +339,10 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             Random r = new Random();
             int index  = r.nextInt(13)+1;
             accuracyImagePath = womenPath+"girl"+index+"/";
+
+            //计步器清零
+            count=0;
+
             //打乱图片
             initData();
             initImage(accuracyImagePath);
@@ -347,6 +351,10 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             Random r = new Random();
             int index  = r.nextInt(8)+1;
             accuracyImagePath = animalPath+"animal"+index+"/";
+
+            //计步器清零
+            count=0;
+
             //打乱图片
             initData();
             initImage(accuracyImagePath);
@@ -355,6 +363,10 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             Random r = new Random();
             int index  = r.nextInt(10)+1;
             accuracyImagePath = sportPath+"sport"+index+"/";
+
+            //计步器清零
+            count=0;
+
             //打乱图片
             initData();
             initImage(accuracyImagePath);

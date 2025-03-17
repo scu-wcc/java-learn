@@ -5,11 +5,11 @@ import scu.wcc.ui.RegisterJFrame;
 public class APP {
     public static void main(String[] args){
 
-        //new GameJFrame();
+        new GameJFrame();
 
         //new RegisterJFrame();
 
-        new LoginJFrame();
+        //new LoginJFrame();
 
     }
 }

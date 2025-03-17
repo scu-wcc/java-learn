@@ -5,10 +5,12 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/revice_code/pom.xml" />
+        <option value="$PROJECT_DIR$/basic_code/day24/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/basic_code/day24/pom.xml" />
         <option value="$PROJECT_DIR$/revice_code/pom.xml" />
       </set>
     </option>

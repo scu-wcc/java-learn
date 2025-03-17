@@ -9,6 +9,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="day24" target="17" />
       <module name="review_code" target="17" />
     </bytecodeTargetLevel>
   </component>

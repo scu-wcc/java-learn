@@ -21,22 +21,13 @@ public class Test {
                 gf.setAge(age);
 
                 break;
-            }catch (NameFormatException e){
-                e.printStackTrace();
-
-            }catch (NumberFormatException e){
-                e.printStackTrace();
-
-            }catch (AgeOutOfBoundsException e){
+            }catch (NameFormatException | NumberFormatException | AgeOutOfBoundsException e){
                 e.printStackTrace();
 
             }
 
 
         }
-
-
-
 
         System.out.println(gf);
 

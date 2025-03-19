@@ -5,6 +5,10 @@ git config --global --unset http.proxy
 //取消https代理
 git config --global --unset https.proxy
 
+正则表达式小贴士: "."表示匹配所有字符，"\\."表示普通".";
+"a.".split("\\.")-> [a]; 数组只有一个元素;
+".a".split("\\.")->[, "a"]; 数组有两个元素，前一个为 ""。
+
 记录java学习
 tip:
 1.数据的存储和计算都是以补码的形式进行的。
@@ -817,4 +821,28 @@ TreeMap:
     2.继承关系: 运行异常就继承RuntimeException, 编译异常就直接继承Exception;
     3.空参构造和带参构造。
 
+68.file:表示路径，可以是文件/文件夹，该路径可以存在，也可以不存在。
+    
+    构造方法
+    1.public File(String road); //将road字符串变成File对象，以便调用方法操作该路径的文件。
+    2.public File(String parent; String child); //将父级路径和子类路径进行拼接
+    3.public File(File parent; String child); //将父级路径和子类路径进行拼接
+    调用构造方法1手动拼接时，需要考虑本操作系统文件连接符
+File的常见方法：
+<img alt="File-判断-获取" height="380" src="File-判断-获取.png" title="File-判断-获取.png" width="400"/>
+<img height="380" src="File-创建-删除.png" width="400"/>
+<img height="380" src="File-遍历-过滤.png" width="400"/>
+
+-特别说明：
+    
+    -已经存在/创建失败:false; 使用该方法成功创建:true;
+    -createNewFile():只能创建文件，不能创建文件夹->导致只能在已经存在的路径上创建文件(可以不指定文件类型)。
+    -mkdir/mkdirs:mkdirs在只创建单级文件夹的时候会调用mkdir方法，只有创建多级文件夹的时候会调用自己的方法.
+    -delete:1.直接删除，不经过回收站；
+            2.只能删除文件&空文件夹，即使文件夹中只存在空文件夹，该文件夹也不能直接删除。
+    
+    -listFiles()->File[]:获取当前文件夹下所有文件/文件夹的file对象
+        1.调用者表示的路径不存在/调用者的路径表示的是文件/调用者表示的路径需要权限：return null;     
+        2.调用者表示的路径为空文件夹: return File[0]; 返回一个长度为0的数组；
+        3.会将隐藏的文件/文件夹返回。
 

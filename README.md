@@ -1072,6 +1072,46 @@ JavaBean类需要实现Serializable接口才能序列化/反序列化
     2.当反序列化读取的此时超过文件中序列化对象个数，就会抛出异常->EOFException
     3.将所有对象装在存入一个集合中进行序列化，这样反序列化时只需要读取一次，取出这个集合即可。
     4.可以看到，集合已经实现了Serializable接口，满足序列化条件。
-
 <img src="集合序列化标志.png" width="1116" height="193"/>
+
+78.打印流:只能包装输出流，无法操作输入流。
     
+    特殊方法:
+        字节打印输出流:PrintStream:没有缓冲区，不需要打开自动刷新。
+            println: 原样输出+换行
+            print: 原样输出
+            printf: 原样输出+占位符
+
+        字符打印流:PrintWriter:有缓冲区，根据构造方法开启自动刷新，
+                 并且自动刷新只对println和printf有效，对print无效，仍然需要手动刷新。
+            println: 同上
+            print: 同上
+            printf: 同上
+System.out.println: 也是一种打印流。
+
+    System: Java类
+    out: 类中的静态printStream，默认指向控制台，不能关闭，否则只能重启虚拟机。
+
+79.解压缩/压缩流
+
+    解压缩流:ZipInputStream: 可以读取原解压包中的所有文件，包括子文件夹。
+        1.调用zis.getNextEntry() -> ZipEntry;获取下一个文件夹/文件
+        2.调用zis.read() -> int;读取当前条目的每一个字节，读完返回-1；
+        3.zis.closeEntry();停止处理当前ZipEntry条目，准备读取下一个条目。
+        4.直到zis.getNextEntry() -> null;说明已经读完了，此时 zis.close()停止对整个压缩包的读取。
+    read()与getNextEntry()一起工作，保证每次只处理一个ZipEntry。
+<img height="286" src="解压缩read()机制.png" width="1224"/>
+
+    压缩流:ZipOutputStream: 将文件解压到指定的.zip压缩包中
+        1.ZipEntry(文件路径):自带mkdirs，可以自行创建多级文件夹
+        2.使用zos.putNextEntry(ZipEntry):将当前条目添加入zos中，接下来就可以使用zos.write()向当前条目写入。
+        3.zos.closeEntry(); 停止对当前条目的操作。
+
+        将压缩包与目标文件关联: File dest = new File(src.getParent(),src.getName()+".zip");
+        ZipEntry(文件路径)中"文件路径"需要认真考虑。
+
+80.第三方包:使用第三方包时一般在当前项目下建立lib文件夹，将第三方jar工具包导入。
+
+    一些处理io的第三方包
+    --Commons-io
+    --Hutool-core-io

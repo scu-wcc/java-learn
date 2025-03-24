@@ -56,7 +56,7 @@ public class Test1 {
         }
         //System.out.println(girlNameList);
 
-        ArrayList<String> list =  getInfo(familyNameList,boyNameList,girlNameList,20,30);
+        ArrayList<String> list =  getInfo(familyNameList,boyNameList,girlNameList,5,5);
 
         Collections.shuffle(list);
         //System.out.println(list);

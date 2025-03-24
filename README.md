@@ -497,8 +497,8 @@ tip:
 
         -红黑树增删改查的性能都比较好
         -与平衡二叉树相比，不是高度平衡的，而是通过红黑规则来平衡的
-<img alt="红黑规则" height="430" src="red_black_rule.png" title="红黑树规则" width="868"/>
-<img alt="节点添加规则" height="417" src="红黑树添加节点规则.png" title="红黑树节点添加时的规则" width="868"/>
+<img alt="红黑规则" height="430" src="img/red_black_rule.png" title="红黑树规则" width="868"/>
+<img alt="节点添加规则" height="417" src="img/红黑树添加节点规则.png" title="红黑树节点添加时的规则" width="868"/>
 
 49.set单列集合：继承Collection接口
     
@@ -567,10 +567,10 @@ tip:
         return的值规则与自然排序相同。
 
 52.总结：单列集合关系集：
-![Collection实现/继承关系](Collection(单列集合关系集).png)
+![Collection实现/继承关系](img/Collection(单列集合关系集).png)
        
 53.如何选择集合(单列)：
-<img alt="选择场景" src="如何选择集合.png" title="如何选择集合"/>
+<img alt="选择场景" src="img/如何选择集合.png" title="如何选择集合"/>
 
 54.双列集合：entry
     顶层接口：Map()
@@ -834,9 +834,9 @@ TreeMap:
     3.public File(File parent; String child); //将父级路径和子类路径进行拼接
     调用构造方法1手动拼接时，需要考虑本操作系统文件连接符
 File的常见方法：
-<img alt="File-判断-获取" height="380" src="File-判断-获取.png" title="File-判断-获取.png" width="400"/>
-<img height="380" src="File-创建-删除.png" width="400"/>
-<img height="380" src="File-遍历-过滤.png" width="400"/>
+<img alt="File-判断-获取" height="380" src="img/File-判断-获取.png" title="File-判断-获取.png" width="400"/>
+<img height="380" src="img/File-创建-删除.png" width="400"/>
+<img height="380" src="img/File-遍历-过滤.png" width="400"/>
 
 -特别说明：
     
@@ -1072,7 +1072,7 @@ JavaBean类需要实现Serializable接口才能序列化/反序列化
     2.当反序列化读取的此时超过文件中序列化对象个数，就会抛出异常->EOFException
     3.将所有对象装在存入一个集合中进行序列化，这样反序列化时只需要读取一次，取出这个集合即可。
     4.可以看到，集合已经实现了Serializable接口，满足序列化条件。
-<img src="集合序列化标志.png" width="1116" height="193"/>
+<img src="img/集合序列化标志.png" width="1116" height="193"/>
 
 78.打印流:只能包装输出流，无法操作输入流。
     
@@ -1100,7 +1100,7 @@ System.out.println: 也是一种打印流。
         3.zis.closeEntry();停止处理当前ZipEntry条目，准备读取下一个条目。
         4.直到zis.getNextEntry() -> null;说明已经读完了，此时 zis.close()停止对整个压缩包的读取。
     read()与getNextEntry()一起工作，保证每次只处理一个ZipEntry。
-<img height="286" src="解压缩read()机制.png" width="1224"/>
+<img height="286" src="img/解压缩read()机制.png" width="1224"/>
 
     压缩流:ZipOutputStream: 将文件解压到指定的.zip压缩包中
         1.ZipEntry(文件路径):自带mkdirs，可以自行创建多级文件夹
@@ -1115,3 +1115,15 @@ System.out.println: 也是一种打印流。
     一些处理io的第三方包
     --Commons-io
     --Hutool-core-io
+
+81.配置文件: 记录文件的环境信息，便于更改。
+    
+    常见的配置文件: .properties
+    对应的Properties类: Map->HashTable->Properties, 属于Map体系
+    特有方法: store(OutputStream/Writer, String)：
+                OutputStream/Writer: 将键值对写入的文件地址。
+                String: 注释。
+
+            load(InputStream/Reader):
+                InputStream/Reader: 从本地文件中读取键值对，加入自身存储的数据中。
+            

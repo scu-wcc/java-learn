@@ -1,17 +1,15 @@
 package com.itheima.ui;
 
+import domain.UserData;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 
 public class AddJFrame extends JFrame implements ActionListener {
-    //记录当前有多少条记录
-    int totalCount;
-
 
     //定义标题输入框
     JTextField titleText  = new JTextField();
@@ -25,9 +23,7 @@ public class AddJFrame extends JFrame implements ActionListener {
     //定义取消按钮
     JButton cancel = new JButton("取消");
 
-    public AddJFrame(int totalCount){
-        this.totalCount=totalCount;
-
+    public AddJFrame(){
         //初始化界面
         initFrame();
 
@@ -49,20 +45,39 @@ public class AddJFrame extends JFrame implements ActionListener {
 
             if(title.isEmpty() || context.isEmpty()){
                 showJDialog("请添加标题或内容");
-                this.setVisible(false);
-                new AddJFrame(totalCount);
+/*                this.setVisible(false);
+                new AddJFrame(totalCount);*/
                 return;
             }
 
             try {
-                BufferedWriter br = new BufferedWriter(new FileWriter("diary\\src\\save.txt",true));
-                br.write("ID="+(totalCount+1)+"&title="+title+"&context="+context);
-                br.newLine();
-                br.close();
+//                BufferedWriter br = new BufferedWriter(new FileWriter("diary\\src\\save.txt",true));
+//                br.write("ID="+(totalCount+1)+"&title="+title+"&context="+context);
+//                br.newLine();
+//                br.close();
+
+                File dataFile =new File("diary\\tablelist.data");
+                ArrayList<UserData> userDataList = new ArrayList<>();
+
+                if(dataFile.exists()&&dataFile.length()>0){
+                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(dataFile));
+                    userDataList = (ArrayList<UserData>)ois.readObject();
+                    ois.close();
+                }
+
+                int index = userDataList.size()+1;
+                userDataList.add(new UserData(index,title,context));
+
+
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("diary\\tablelist.data"));
+                oos.writeObject(userDataList);
+                oos.close();
+
             }catch (IOException ioException){
                 ioException.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
             }
-
 
             this.setVisible(false);
             new NoteJFrame();

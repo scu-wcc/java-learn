@@ -1,5 +1,7 @@
 package com.itheima.ui;
 
+import domain.UserData;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,11 +17,14 @@ import java.util.zip.ZipOutputStream;
 public class NoteJFrame extends JFrame implements ActionListener {
 
 
-    int totalCount;
 
-    ArrayList<String> idList= new ArrayList<>();
+    //将用户的数据打包成集合
+    ArrayList<UserData> userDataList = new ArrayList<>();
+    
+    
+/*    ArrayList<String> idList= new ArrayList<>();
     ArrayList<String> titleList= new ArrayList<>();
-    ArrayList<String> textList= new ArrayList<>();
+    ArrayList<String> textList= new ArrayList<>();*/
 
     //创建三个按钮
     JButton add = new JButton("添加");
@@ -51,7 +56,7 @@ public class NoteJFrame extends JFrame implements ActionListener {
         if(obj == add){
             System.out.println("添加按钮被点击");
             this.setVisible(false);
-            new AddJFrame(totalCount);
+            new AddJFrame();
 
         }else if(obj == update){
             System.out.println("修改按钮被点击");
@@ -96,21 +101,34 @@ public class NoteJFrame extends JFrame implements ActionListener {
                 int i = showChooseJDialog();
                 if(i==0){
                     //选择删除
-                    idList.remove(selectIndex);
-                    titleList.remove(selectIndex);
-                    textList.remove(selectIndex);
-                    totalCount--;
-                    for (int j = selectIndex; j < totalCount; j++) {
-                        idList.set(j,(j+1)+"");
+                   try {
+                       ObjectInputStream ois = new ObjectInputStream(new FileInputStream("diary\\tablelist.data"));
+                       userDataList = (ArrayList<UserData>)ois.readObject();
+                       ois.close();
+                   }catch (IOException | ClassNotFoundException ioe){
+                       ioe.printStackTrace();
+                   }
+                   
+                   
+                   userDataList.remove(selectIndex);
+                    int count = userDataList.size();
+                    for (int j = selectIndex; j < count; j++) {
+                        UserData currUser = userDataList.get(j);
+                        int currUserId=currUser.getId();
+                        currUser.setId(currUserId-1);
                     }
 
                     try {
-                        BufferedWriter br = new BufferedWriter(new FileWriter("diary\\src\\save.txt",false));
+/*                        BufferedWriter br = new BufferedWriter(new FileWriter("diary\\src\\save.txt",false));
                         for (int j = 0; j <totalCount; j++) {
                             br.write("ID="+idList.get(j)+"&title="+titleList.get(j)+"&context="+textList.get(j));
                             br.newLine();
                         }
-                        br.close();
+                        br.close();*/
+
+                        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("diary\\tablelist.data"));
+                        oos.writeObject(userDataList);
+                        oos.close();
                     }catch (IOException ioException){
                         ioException.printStackTrace();
                     }
@@ -246,35 +264,45 @@ public class NoteJFrame extends JFrame implements ActionListener {
         /*
          *从文件中读取数据，添加到表格中
          */
-        int count=0;
+
         try{
-            BufferedReader br = new BufferedReader( new FileReader("diary\\src\\save.txt"));
+/*            BufferedReader br = new BufferedReader( new FileReader("diary\\src\\save.txt"));
             String line ;
             while((line=br.readLine())!=null){
                 idList.add(line.split("&")[0].split("=")[1]);
                 titleList.add(line.split("&")[1].split("=")[1]);
                 textList.add(line.split("&")[2].split("=")[1]);
-                count++;
 
             }
-
-            br.close();
+            br.close();*/
+            File dataFile = new File("diary\\tablelist.data");
+            if(dataFile.exists() && dataFile.length()>0){
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream("diary\\tablelist.data"));
+                userDataList = (ArrayList<UserData>)ois.readObject();
+                ois.close();
+            }else{
+                dataFile.createNewFile();
+            }
         }catch (IOException e){
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
         //记录一共有多少条记录
-        totalCount=count;
-        System.out.println("一共有"+totalCount+"条记录");
+        int count = userDataList.size();
+        System.out.println("一共有"+count+"条记录");
 
         //定义表格的标题
         Object[] tableTitles = {"编号", "标题", "正文"};
         //定义表格的内容
         //二维数组中的每一个一维数组，是表格里面的一行数据
         Object[][] tabledatas = new Object[count][3];
-        for (int i = 0; i < count; i++) {
-            Object[] temp ={idList.get(i), titleList.get(i), textList.get(i)};
-            tabledatas[i]= temp;
+        int index=0;
+        for (UserData userData : userDataList) {
+            Object[] temp = {userData.getId(),userData.getTitle(),userData.getContext()};
+            tabledatas[index] = temp;
+            index++;
         }
 
 

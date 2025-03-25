@@ -1,5 +1,7 @@
 package com.itheima.ui;
 
+import domain.UserData;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -52,47 +54,61 @@ public class UpdateJFrame extends JFrame implements ActionListener {
             }
 
             //读取内容
-            ArrayList<String> idList= new ArrayList<>();
-            ArrayList<String> titleList= new ArrayList<>();
-            ArrayList<String> textList= new ArrayList<>();
-            int count=0;
+            ArrayList<UserData> userList = new ArrayList<>();
 
             try{
-                BufferedReader br = new BufferedReader( new FileReader("diary\\src\\save.txt"));
+/*                BufferedReader br = new BufferedReader( new FileReader("diary\\src\\save.txt"));
                 String line ;
                 while((line=br.readLine())!=null){
                     idList.add(line.split("&")[0].split("=")[1]);
                     titleList.add(line.split("&")[1].split("=")[1]);
                     textList.add(line.split("&")[2].split("=")[1]);
                     count++;
-
                 }
-                br.close();
+                br.close();*/
+
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream("diary\\tablelist.data"));
+                userList = (ArrayList<UserData>)ois.readObject();
+                ois.close();
+
             }catch (IOException ioe){
                 ioe.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
             }
+
+            String currTitle = userList.get(index).getTitle();
+            String currText = userList.get(index).getContext();
+            titleText.setText(currTitle);
+            contentText.setText(currText);
 
 
             if(title.isEmpty() && !text.isEmpty()){
                 //修改内容
-                textList.set(index,text);
+                userList.get(index).setContext(text);
+
             }else if(!title.isEmpty() && text.isEmpty()){
                 //修改标题
-                titleList.set(index,title);
+                userList.get(index).setTitle(title);
+
             }else if(!title.isEmpty()&& !text.isEmpty()){
                 //都修改
-                textList.set(index,text);
-                titleList.set(index,title);
+                userList.get(index).setContext(text);
+                userList.get(index).setTitle(title);
             }
 
             //将数据写回文件中
             try {
-                BufferedWriter br = new BufferedWriter(new FileWriter("diary\\src\\save.txt",false));
+/*                BufferedWriter br = new BufferedWriter(new FileWriter("diary\\src\\save.txt",false));
                 for (int i = 0; i < count; i++) {
                     br.write("ID="+(idList.get(i))+"&title="+titleList.get(i)+"&context="+textList.get(i));
                     br.newLine();
                 }
-                br.close();
+                br.close();*/
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("diary\\tablelist.data"));
+                oos.writeObject(userList);
+                oos.close();
+
             }catch (IOException ioException){
                 ioException.printStackTrace();
             }
@@ -149,6 +165,29 @@ public class UpdateJFrame extends JFrame implements ActionListener {
         cancel.setFont(new Font("宋体",Font.PLAIN,24));
         cancel.addActionListener(this);
         this.getContentPane().add(cancel);
+
+
+
+        //--------------------------------------------------------------------------------------------------------------
+        ArrayList<UserData> userList = new ArrayList<>();
+
+        try{
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("diary\\tablelist.data"));
+            userList = (ArrayList<UserData>)ois.readObject();
+            ois.close();
+
+        }catch (IOException ioe){
+            ioe.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        String currTitle = userList.get(index).getTitle();
+        String currText = userList.get(index).getContext();
+        titleText.setText(currTitle);
+        contentText.setText(currText);
+
+        //--------------------------------------------------------------------------------------------------------------
 
     }
 

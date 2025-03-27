@@ -145,7 +145,7 @@ public class NoteJFrame extends JFrame implements ActionListener {
 
         }else if(obj == exportItem){
             System.out.println("菜单的导出功能");
-            Properties prop = new Properties();
+/*            Properties prop = new Properties();
             try {
                 prop.load(new FileReader("diary\\zipPath.properties"));
             } catch (IOException ex) {
@@ -164,12 +164,14 @@ public class NoteJFrame extends JFrame implements ActionListener {
                 throw new RuntimeException(ex);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
-            }
+            }*/
+
+            new ToZipThread().start();
             showJDialog("导出成功");
 
         }else if(obj == importItem){
             System.out.println("菜单的导入功能");
-            Properties prop = new Properties();
+/*            Properties prop = new Properties();
             try {
                 prop.load(new FileReader("diary\\zipPath.properties"));
             } catch (IOException ex) {
@@ -201,11 +203,13 @@ public class NoteJFrame extends JFrame implements ActionListener {
                 zis.close();
             }catch (IOException ioe){
                 ioe.printStackTrace();
-            }
+            }*/
+            new UnZipThread().start();
             showJDialog("导入成功！");
         }
     }
 
+/*
     //压缩操作
     public void toZip(File src, ZipOutputStream zos, String address){
         if(!src.exists()){
@@ -249,6 +253,7 @@ public class NoteJFrame extends JFrame implements ActionListener {
         }
 
     }
+*/
 
 
 

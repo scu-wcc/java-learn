@@ -9,10 +9,14 @@ git config --global --unset https.proxy
 "a.".split("\\.")-> [a]; 数组只有一个元素;
 ".a".split("\\.")->[, "a"]; 数组有两个元素，前一个为 ""。
 
-字符集: java可以按照指定的字符集读取文件，之后再使用读取到的字符查询自身的Unicode编码对应的字符，展示出来。
+-字符集: java可以按照指定的字符集读取文件，之后再使用读取到的字符查询自身的Unicode编码对应的字符，展示出来。
        写出也一样，在将某个字符写出到文件时，会那种该字符去查询对应的字符集的编码，将其写出。
 
-标记型接口: JavaBean类必须实现某个接口(有的接口中并没有抽象方法)才能进行某些操作，比如克隆，序列化。这些接口就是标记型接口。
+-标记型接口: JavaBean类必须实现某个接口(有的接口中并没有抽象方法)才能进行某些操作，比如克隆，序列化。这些接口就是标记型接口。
+
+-在循环的同步代码块中，添加sleep()可以使线程执行一次循环后与其他线程再次竞争，避免某一个线程将结果全部执行完。
+
+-不同的线程开启时会占据不同的栈空间，其调用的run()方法的局部变量存在在对应的栈空间中。
 
 记录java学习
 tip:
@@ -1126,4 +1130,155 @@ System.out.println: 也是一种打印流。
 
             load(InputStream/Reader):
                 InputStream/Reader: 从本地文件中读取键值对，加入自身存储的数据中。
-            
+         
+82.线程: 进程中的一部分，系统调度的最小单位。
+
+    -并发: 同一时刻，有多个指令在单个CPU上交替执行；
+    -并行: 同一时刻，有多个指令在多个CPU上同时执行。
+
+获取当前线程的方法: Thread.currentThread() -> Thread
+
+创建线程的三种方式:都与Thread()有关，Thread()就是线程。
+ 
+    1.子类继承于Thread类，重写run()方法，创建子类对象后调用start()方法；
+      start()方法自动调用重写的run()方法，直接调用run()就不是多线程。
+
+    2.实现类实现Runnable接口，重写run()方法。
+      创建实现类对象后作为形参传给Thread()的构造方法，通过Thread.start()开启线程。
+      new Thread(new Run).start();
+    
+    3.与Callabele和Future接口相关。
+      实现类实现Callable接口，重写call()方法--该方法具有返回值。
+      创建实现类与FuturnTask(Futurn的实现类),实现类对象作为FunturnTask构造方法的形参: 该ft管理线程方法的返回值。
+    new FuturnTask<E>(new callable);
+      创建Thread()类对象，ft作为Thread构造方法的形参，该thread作为执行方法的线程。
+      ft.get(): 获取call()方法的执行之后的返回值。
+    new Thread(new FuturnTask(new callable)).start: 启动线程。
+
+线程的常见方法:
+    
+    getName()->String:获取当前线程的名称。
+    setName(String)->void:设置当前线程的名称。
+        -默认名称：Thread-x :X表示当前创建的是第几个线程，从0开始。
+        -重写构造方法调用Thread()的构造方法public (String name){ super(name) }可以在创建线程对象时直接命名。
+
+    守护线程:setDaemonThread(true);如果守护线程还未结束，当其他非守护线程结束时，守护线程也会陆续结束(逐渐停止)。
+    插队线程: thread.join(); 线程A调用了线程B.join()，那么线程A就会被阻塞至线程B调用完成。
+
+    静态方法:
+    currentThread():获取当前线程。
+        -执行main方法的线程就叫"main"线程
+    sleep(long): 使当前线程沉睡n毫秒。
+    yield():出让线程/礼让线程: 线程执行完当前操作后会释放cpu，再次与其他线程竞争cpu的使用权。
+            礼让线程可以使得CPU的使用尽可能均匀。
+
+
+优先级: JVM使用抢占式调用，多线程调度是随机的，优先级越高，抢到CPU的概率越高
+        
+    -优先级默认为5，范围:1-10。
+    优先级不是绝对的，低优先级的线程也可能先于高优先级线程抢到资源。
+    getPriority->int: 获取当前线程的优先级。
+    setPriority->void: 设置当前线程的优先级。
+
+
+
+<img height="400" src="img\\线程的生命周期.png" width="1000"/>
+
+线程安全性问题: 多线程进行操作时，由于CPU的执行权随着会被抢走，导致运行的结果不一致。
+
+    解决方法: 同步代码块: synchronized(锁对象){
+                            操作共享数据的代码
+                        };
+    1.锁对象可以是任意对象，但必须有唯一性(代表线程指向同一把锁)。一般使用当前类的class对象作为锁对象。
+    2.锁默认打开，一旦有一个线程获取锁，锁就会关闭，直到该线程执行完同步代码块里的代码，释放锁，锁才会重新打开。
+    3.锁打开时，线程可以竞争锁来获取代码的执行权，一旦锁关闭，没有获得锁的线程必须在锁外等待。
+    注意: 当获得锁的线程处于睡眠/阻塞状态，其CPU的执行权会释放，
+         但是由于没有释放锁，其他的线程即使得到CPU的执行权仍然无法执行锁中代码，直到睡眠/阻塞线程将代码执行完毕，释放锁。
+
+    同步方法: 给方法加上synchronized关键字，此时锁对象由虚拟机指定:
+            1.静态方法->该类的class对象。
+            2.非静态方法-> this。
+    同步方法相当于给整个方法添加了同步锁。
+
+Lock: JDK5新特性，能手动加锁、释放锁。线程必须指向同一把锁，才能实现同步。
+    
+    lock.lock():获取锁
+    lock.unlock:释放锁
+    注意: 该操作会导致程序无法结束!!!
+    由于手动加锁后，执行某些代码会使得获得lock.lock()的线程跳过lock.unlock()的操作，导致其他线程无法执行获取锁，一直处于阻塞状态，程序无法停止。
+    解决方法: 使用try-catch-finally体系，即使try/catch中将线程跳转到其他地方，也必须执行finally中lock.unlock()方法，释放锁。
+
+锁嵌套容易导致死锁->程序无法往下执行。
+
+83，生产者-消费者: 等待-唤醒机制
+
+    void wait(): 当前线程等待，直到被唤醒；
+    void notify(): 随机唤醒一个线程；
+    void notifyAll: 唤醒所有线程。
+要将执行的代码放入synchronized(同一个锁对象)中，并且通过同一个lock来关联控制要等待/唤醒的线程。
+
+    控制同步代码块的lock与控制等待/唤醒的lock必须是同一把锁。
+    synchronized(lock){
+    ......
+    lock.wait();
+    ......
+    lock.notifyAll();
+    ......
+    }
+
+需要第三方“桌子”来记录生产产品的数量、共同使用的锁、一共能拿取多少次等。
+
+阻塞队列：阻塞队列方法底层已经存在锁，不需要额外新增锁。
+需要保证生产者和消费者操作的是同一条阻塞队列。
+
+    -ArrayBlockingQueue: 底层为数组，创建的时候要指定数组长度。
+    -LinkedBlockingQueue: 底层为链表，不需要指定长度。
+    方法: 底层已经实现锁机制，不需要新增锁，避免造成锁嵌套。
+        put() -> void; 放入
+        take() -> <E>; 拿出
+
+84.线程在虚拟机中的六种状态
+
+<img height="350" src="img/线程在JVM中的状态1.png" width="625"/>
+<img height="410" src="img/线程在JVM中的状态2.png" width="625"/>
+
+
+85.线程池(pool): 当线程执行完后不会被销毁，而是保存在线程池中等待下次复用。
+
+使用工具类创建: 比较简单
+
+    1.创建线程池: 使用线程池工具类: Executors (以下简称为E)
+        -E.newCachedThreadPool(); 创建一个没有线程数量上限的线程池；
+        -E.newFixedThreadPool(int); 创建一个有线程数量上线的线程池。
+
+    2.使用pool.submit(实现类/子类); 线程池会自动调用重写的run()方法
+    3.执行新任务:
+        -当前存在空闲线程: 复用空闲线程。
+        -当前不存在空闲线程：
+            1.线程数量达到上限: 该任务排队等待之前的任务完成。
+            2.线程数量未达到上限: 创建新线程执行该任务。
+
+使用内存池类本身创建：自定义内存池
+    
+    ThreadPoolExecutor pool = new ThreadPoolExecutor(
+                3, //核心线程数量
+                6, //最大线程数量
+                10, //临时线程最大空闲时间，超过时间就会被销毁
+                TimeUnit.SECONDS, //空闲时间的单位
+                new ArrayBlockingQueue<>(3), //阻塞队列
+                Executors.defaultThreadFactory(), //创建线程的方式
+                new ThreadPoolExecutor.AbortPolicy()//拒绝策略
+        );
+    细节：1.核心线程忙碌+阻塞队列满了 --> 创建临时线程(数量=最大线程数量-核心线程数量)
+         2.阻塞队列可以创建LinkedBlockingQueue，队列永远不满。
+         3.当所有线程都处于忙碌状态+阻塞队列排满了，此时新任务将触发拒绝策略(ThreadPoolExecutor的内部静态类).
+
+<img height="300" src="img/自定义内存池参数.png" width="625"/>
+<img height="300" src="img/自定义线程池的细节.png" width="625"/>
+<img height="300" src="img/线程池拒绝策略.png" width="625"/>
+
+线程池大小:
+<img height="300" src="img/线程池大小.png" width="625"/>
+
+最大并行数：
+<img height="300" src="img/最大并行数.png" width="625"/>

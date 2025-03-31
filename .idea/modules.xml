@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/NetworkChatingroom/NetworkChatingroom.iml" filepath="$PROJECT_DIR$/NetworkChatingroom/NetworkChatingroom.iml" />
       <module fileurl="file://$PROJECT_DIR$/day01/day01.iml" filepath="$PROJECT_DIR$/day01/day01.iml" />
       <module fileurl="file://$PROJECT_DIR$/day02/day02.iml" filepath="$PROJECT_DIR$/day02/day02.iml" />
       <module fileurl="file://$PROJECT_DIR$/basic_code/day02/day021.iml" filepath="$PROJECT_DIR$/basic_code/day02/day021.iml" />
@@ -33,6 +34,8 @@
       <module fileurl="file://$PROJECT_DIR$/basic_code/day28/day28.iml" filepath="$PROJECT_DIR$/basic_code/day28/day28.iml" />
       <module fileurl="file://$PROJECT_DIR$/basic_code/day29/day29.iml" filepath="$PROJECT_DIR$/basic_code/day29/day29.iml" />
       <module fileurl="file://$PROJECT_DIR$/basic_code/day30/day30.iml" filepath="$PROJECT_DIR$/basic_code/day30/day30.iml" />
+      <module fileurl="file://$PROJECT_DIR$/basic_code/day31/day31.iml" filepath="$PROJECT_DIR$/basic_code/day31/day31.iml" />
+      <module fileurl="file://$PROJECT_DIR$/basic_code/day32/day32.iml" filepath="$PROJECT_DIR$/basic_code/day32/day32.iml" />
       <module fileurl="file://$PROJECT_DIR$/diary/diary.iml" filepath="$PROJECT_DIR$/diary/diary.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/java-learn.iml" filepath="$PROJECT_DIR$/.idea/java-learn.iml" />
       <module fileurl="file://$PROJECT_DIR$/puzzlegame/puzzlegame.iml" filepath="$PROJECT_DIR$/puzzlegame/puzzlegame.iml" />

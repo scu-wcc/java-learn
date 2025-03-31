@@ -1282,3 +1282,160 @@ Lock: JDK5新特性，能手动加锁、释放锁。线程必须指向同一把�
 
 最大并行数：
 <img height="300" src="img/最大并行数.png" width="625"/>
+
+86.网络编程: 不同计算机通过网络协议进行交换数据
+
+常见的软件架构：CS/BS
+
+    -CS：Client/Server:1.需要开发客户端，可以提供更为定制化、精美的页面。
+                       2.更新时需要客户端一起更新。
+    -BS：Browser/Server:1.不需要提供客户端，用户只需要通过网站就可以访问。
+                        2.更新时只需要客户刷新浏览器即可。
+网络编程三要素: IP、port、protocol。
+
+IP:Internet Protocol 设备在网络中的地址
+
+    -IPv4: 32bits=8bitsx4  192.168.0.1
+    -IPv6: 128bits=16bitsx8 ABCD:1010:10:1:0:1:111A:895 
+    -127.0.0.1 : localhost 向这个地址发送数据的时候不需要经过路由器，在经过本机网卡时直接返回。
+
+InetAddress: Java中用来表示IP地址的类，根据当前操作系统返回对应子类(IPv4\IPv6)
+
+    -没有构造方法，可以通过静态方法getByName(host); 获取一个InetAddress对象。
+    getHostName()->String:返回主机名 
+    getHostAddress()->String:返回主机地址
+
+port:端口，程序在设备中的唯一标识。
+    
+    1.由两位字节表示，0-65535.
+    2.0-1023由知名的应用/服务使用，自己使用1024以上的端口。
+
+UDP编程:单播，向特定的IP+端口地址传输数据
+    
+    1.创建UDP接口:DatagramSocket();
+        -发送端可以不指定端口，由系统默认给出。
+        -接收端必须指定端口，才能接收到发给特定端口的数据报。
+
+    2.创建存放数据的容器: DatagramPacket();
+        -发送段要指定：发送的字节数组、长度、接收端的地址、接收端的端口。
+        -接收端要指定用于接收的字节数组、长度。
+
+    3.发送数据/接收数据: send(dp)/receive(dp);
+        -receive():一个阻塞方法，直到接收到数据才会往下执行。
+
+    4.接收端可以解析收到的数据：
+        -dp.getAddress/getPort:获取发送方的地址/端口号
+        -dp.getLength():获取本次接收数据的字节长度。
+        -dp.getData():获取字节数组容器。
+
+    5.关闭接口: close();
+
+组播: 向局域网内某一组设备发送数据
+    
+    1.发送端和接收端都是用 MulticastSocket()创建连接，接收段指定端口。
+    2.接收端通过ms.joinGroup(InetAddress), 将自己添加到某个组中。
+    3.其他操作与单播相同
+    组播地址段: 224.0.0.1 - 239.255.255.255, 其中224.0.0.1-224.0.0.255为预留的组播地址
+
+广播: 向局域网内所有设备发送数据报。将单播发送的数据报的接收地址改为255.255.255.255即可。
+
+TCP编程: 需要三次握手和四次挥手
+
+    -Server: 服务器端
+        1.创建服务器端Socket，指定等待端口: new ServerSocket(int port);
+        2.等待客户端发送连接请求: accept() -> Socket; 返回与该客户端连接的专用接口。
+        3.接收客户端发来的字节流数据: Socket.getInputStream.read(); 
+          将该字节流转换成字符流，避免中文乱码问题: new InputStreamReader( Socket.getInputStream )。
+        4.关闭连接: Socket.close();
+        5.关闭服务器: ServerSocket.close();
+
+    -Client: 客户端
+        1.创建连接，指定服务器IP与等待端口: new Socket(IP, port);
+          该方法在创建socket时就会触发连接，如果无法连接，就会报错。   
+        2.发送字节流 Socket.OutputStream.writer(context);
+        4.关闭连接
+
+三次握手：
+    
+    1.Client发送连接请求，并确定初始序列号x。 -> Client的发送能力
+    2.Server返回确认请求，请求x+1，并附加自己的初始序列号y。 -> Server的接收与发送能力
+    3.Client发送第一段报文x+1，请求y+1，确认连接建立。 -> Client的接收能力
+
+四次挥手
+    
+    1.Client发送关闭连接请求报文。
+    2.服务器发送收到关闭请求报文，并处理最后的数据。
+    3.当服务器端数据处理完毕，发送第二段正式关闭确认报文。
+    4.Client返回正式关闭连接报文，Server接收到后关闭服务器端连接，Client等待一段时间后自动关闭客户端连接。
+
+read()方法是一个阻塞方法，会一直读取客户端发来的信息，直到该连接关闭才返回-1。
+
+    1.使用socket.shutdownOutput(); 传递结束标志，read()返回-1
+      但是shutdownOutput/Input()会导致调用端禁用此套接字的输出流/输入流。
+
+87.UUID: 可以生成不重复的字符串，用于解决文件名重复的问题
+
+88.反射：允许对类的成员变量、成员方法、构造方法进行编程访问
+
+    作用1：获取类的所有信息，获取之后再做其他操作。
+    作用2：与配置文件结合，动态创建对象，调用方法。
+
+获取类的class对象(字节码文件对象)的三种方法: 
+    
+    1.Class.forName(全类名): -> 最常用的
+    2.类名.class: -> 一般用于变量传递
+    3.对象.getClass: ->只有有该类对象才能使用
+
+关于类的构造方法、成员方法、成员变量都有其对应的类。
+
+    -Constructor: 构造方法类
+    -Method: 成员方法类
+    -Field: 成员变量类
+    可以通过class对象(以下统称obj)来调用方法获取它们，然后可以获取他们的修饰符、名字、权限等信息
+    obj.getConstructors/Methods/Fields -> 返回公共构造方法/成员方法/成员变量数组
+    obj.getDeclaredConstructors/Methods/Fields -> 返回所有构造方法/成员方法/成员变量数组
+    其中getMethods会将继承的父类的公共方法也返回，Declared只返回自己的。
+    在调用私有的方法、变量时，需要setAccessible(true),临时取消权限检查。
+    调用方法：
+    返回值(如果是void就不需要) = Method.invoke(实例对象, 变量1,......);
+    
+89.动态代理: DynamicProxy；在不破坏源代码的基础上，增添新功能。
+
+    使用场景:原类中需要干的事太多，需要额外新增功能，但不能破环原类的结构。
+    使用步骤:
+        1.原类将需要扩展的方法抽取到一个接口中，并实现这个类。
+        2.代理和原类都是这个接口的实现类。
+        3.使用Proxy.newProxyInstance(ClassLoader, Class<?>[] interfaces, InvocationHandler)来创建代理;
+        /*
+         *参数1：用哪个类的加载器去加载生成的代理。
+         * 参数2：指定接口，这个接口指明代理需要完成什么事。
+         * 参数3：指定代理要干的具体事件
+         */
+            Proxy.newProxyInstance(
+                ProxyUtil.class.getClassLoader(), //固定格式
+                new Class[]{Star.class}, //指定代理要完成的事，有什么方法，可以添加多个接口
+                new InvocationHandler() { // 代理要做的具体事件
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        /*
+                         *参数1：代理对象
+                         * 参数2：代理要运行的方法
+                         * 参数3：代理运行方法时要传递的参数
+                         */
+                        //代理做的前置工作
+                        if("sing".equals(method.getName())){
+                            System.out.println("准备话筒，收钱");
+                        }else if("dance".equals(method.getName())){
+                            System.out.println("准备场地，收钱");
+                        }
+
+                        //调用大明星中对应的方法，对应源代码
+                        return method.invoke(bigStar,args);
+
+                    }
+                }
+        );
+        //将生成的代理返回
+        return star;
+
+

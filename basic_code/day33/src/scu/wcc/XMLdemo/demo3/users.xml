@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<users>
+    <user id="1">
+        <name>张三</name>
+        <password>123</password>
+        <userid>123456789</userid>
+        <phone>11012012138</phone>
+        <flag>true</flag>
+    </user>
+
+    <user id="2">
+        <name>李四</name>
+        <password>1234</password>
+        <userid>987654321</userid>
+        <phone>11111111111</phone>
+        <flag>false</flag>
+    </user>
+</users>

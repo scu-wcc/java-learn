@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<书架 xmlns="http://www.hp.com/bookSchema">
+    <书>
+        <书名>如何睡觉</书名>
+        <作者>小羊</作者>
+        <售价>12.00</售价>
+    </书>
+</书架>
+

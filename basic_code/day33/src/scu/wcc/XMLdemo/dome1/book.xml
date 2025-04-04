@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE 书架 SYSTEM 'D:\JAVASE\java-learn\basic_code\day33\src\scu\wcc\XMLdemo\dome1\book.dtd'>
+<书架>
+    <书>
+        <书名>JAVA精通之路</书名>
+        <作者>甲壳虫</作者>
+        <售价>99.99</售价>
+    </书>
+    <书>
+        <书名>AI与Python</书名>
+        <作者>哥布林</作者>
+        <售价>13.50</售价>
+    </书>
+
+</书架>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<students>
+
+    <!--这是第一个学生的标签-->
+    <student id="1">
+        <name>zhangsan</name>
+        <age>23</age>
+    </student>
+
+    <compare>
+
+        1&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;2
+        <![CDATA[1<<<<<<<<<<<<<<<<<2]]>
+
+    </compare>
+
+
+</students>
